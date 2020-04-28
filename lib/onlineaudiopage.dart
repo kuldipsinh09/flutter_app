@@ -1,12 +1,6 @@
-import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/src/foundation/constants.dart';
-import 'dart:async';
-import 'dart:io';
-import 'package:http/http.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:url_audio_stream/url_audio_stream.dart';
 
 class OnlineAudioPlay extends StatefulWidget {
   @override
@@ -20,15 +14,17 @@ class _OnlineAudioPlayState extends State<OnlineAudioPlay> {
     "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1xtra_mf_p"
   ];
   double _sliderValue = 0.0;
-  AudioCache audioCache = AudioCache();
-  AudioPlayer advancedPlayer = AudioPlayer();
-  String localFilePath;
 
+  String localFilePath;
+  AudioStream stream;
+  bool _isResume = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loadFile(arrayAudioURL[0]);
+//    _loadFile(arrayAudioURL[0]);
+    stream = new AudioStream(arrayAudioURL[0]);
+
   }
 
   @override
@@ -57,8 +53,11 @@ class _OnlineAudioPlayState extends State<OnlineAudioPlay> {
                   width: 40,
                 ),
                 IconButton(
-                    icon: Image.asset("images/play.png"), onPressed: () {
-                  _loadFile(arrayAudioURL[0]);
+                    icon: Image.asset(_isResume ? "images/pause.png" : "images/play.png"), onPressed: () {
+                  setState(() {
+                    _isResume = !_isResume;
+                  });
+                  if (_isResume) {playMusic();} else {resumeMusic();}
                 }),
                 SizedBox(
                   width: 40,
@@ -87,19 +86,12 @@ class _OnlineAudioPlayState extends State<OnlineAudioPlay> {
     );
   }
 
-  Future _loadFile(String url) async {
-    print("url is $url");
-    final bytes = await readBytes(url);
-    print("Total byte $bytes");
-    final dir = await getApplicationDocumentsDirectory();
-    print("dir is $dir");
-    final file = File('${dir.path}/audio.mp3');
-    print("file is $file");
-    await file.writeAsBytes(bytes);
-    if (await file.exists()) {
-      setState(() {
-        localFilePath = file.path;
-      });
-    }
+
+  void playMusic() async {
+    stream.start();
+  }
+  void resumeMusic()  {
+    stream.pause();
+    // quickly plays the sound, will not release
   }
 }
