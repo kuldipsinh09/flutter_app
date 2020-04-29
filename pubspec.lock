@@ -78,6 +78,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  flute_music_player:
+    dependency: "direct main"
+    description:
+      name: flute_music_player
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -143,7 +150,7 @@ packages:
     source: hosted
     version: "1.6.4"
   path_provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
@@ -252,13 +259,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
-  url_audio_stream:
-    dependency: "direct main"
-    description:
-      name: url_audio_stream
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0+3"
   uuid:
     dependency: transitive
     description:
